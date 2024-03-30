@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Subir y Transformar Archivos</title>
+</head>
+<body>
+    <h2>Subir Archivos y Transformar</h2>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <label for="tableFile">Archivo de Tabla:</label>
+        <input type="file" name="tableFile" id="tableFile" required>
+        <br><br>
+        <label for="dataFile">Archivo de Datos:</label>
+        <input type="file" name="dataFile" id="dataFile" required>
+        <br><br>
+        <label for="outputPath">Ruta de Salida:</label>
+        <input type="text" name="outputPath" id="outputPath" required>
+        <br><br>
+        <label for="rangeValue">Seleccionar Valor:</label>
+        <input type="range" name="rangeValue" id="rangeValue" min="1" max="100" value="50">
+        <br><br>
+        <button type="button" onclick="submitForm()">Transformar</button>
+    </form>
+    <script>
+        function submitForm() {
+            var formData = new FormData(document.getElementById('uploadForm'));
+            document.body.innerHTML += '<p>Procesando...</p>'; // Ruedecita de pensando (texto simplificado)
+            fetch('/', {
+                method: 'POST',
+                body: formData,
+            }).then(response => response.text())
+              .then(data => {
+                  document.body.innerHTML += `<p>${data}</p>`;
+              }).catch(error => {
+                  console.error('Error:', error);
+              });
+        }
+    </script>
+</body>
+</html>
