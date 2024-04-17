@@ -1,0 +1,47 @@
+/* static/style.css */
+.submit-button-container {
+    text-align: left;
+    margin-left: 20%;
+    margin-top: 20px; /* Ajusta según sea necesario */
+}
+
+.submit-button {
+    padding: 10px 20px;
+    font-size: 20px;
+    cursor: pointer;
+    background-color: #007bff; /* Color de fondo azul */
+    color: white; /* Texto blanco */
+    border: none;
+    border-radius: 5px; /* Bordes redondeados */
+}
+
+
+.button-descargar {
+    background-color: #4CAF50; /* Verde */
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none; /* Remueve el subrayado de los enlaces */
+}
+
+.button-borrar {
+    background-color: #f44336; /* Rojo */
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.button-previsualizar {
+    background-color: #800080; /* Morado */
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+}

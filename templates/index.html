@@ -2,39 +2,84 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Subir y Transformar Archivos</title>
+    <title>Transformación de Archivos version {{ version }} </title></title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h2>Subir Archivos y Transformar</h2>
+    <h2>Transformación de Archivos excel - RAW Binter  ver:{{ version }} </h2>
     <form id="uploadForm" enctype="multipart/form-data">
-        <label for="tableFile">Archivo de Tabla:</label>
-        <input type="file" name="tableFile" id="tableFile" required>
-        <br><br>
-        <label for="dataFile">Archivo de Datos:</label>
-        <input type="file" name="dataFile" id="dataFile" required>
-        <br><br>
-        <label for="outputPath">Ruta de Salida:</label>
-        <input type="text" name="outputPath" id="outputPath" required>
-        <br><br>
-        <label for="rangeValue">Seleccionar Valor:</label>
-        <input type="range" name="rangeValue" id="rangeValue" min="1" max="100" value="50">
-        <br><br>
-        <button type="button" onclick="submitForm()">Transformar</button>
+        <label for="archivos">Seleccionar archivos a transformar:</label>
+        <input type="file" id="archivos" name="file" multiple>
+        <br> <br> 
+        <label for="cpm_por_placement">Seleccionar archivo de CPM por placement:</label>
+        <input type="file" id="cpm_por_placement" name="cpm_por_placement">
+        <br> <br> 
+        <label for="tablaCPM">Seleccionar archivo de Tablas CPM:</label>
+        <input type="file" id="tablaCPM" name="tabla_cpm">
+        <div class="submit-button-container">
+            <button type="button" onclick="submitForm()" class="submit-button">Transformar</button>
+        </div>
     </form>
+
+
+
+    <h2>Archivos Transformados:</h2>
+    <ul id="transformedFilesList">
+        {% for file in files %}
+            <br>
+            <li>
+                {{ file }}
+                <!-- Botones para cada acción -->
+                <a href="#" onclick="location.href='/download/{{ file }}'" class="button-descargar">Descargar</a>
+                <a href="#" onclick="location.href='/preview/{{ file }}'" class="button-previsualizar">Previsualizar</a>
+                <a href="#" onclick="location.href='/delete/{{ file }}'" class="button-borrar">Borrar</a>
+            </li>
+        {% endfor %}
+    </ul>
+    
+
     <script>
         function submitForm() {
             var formData = new FormData(document.getElementById('uploadForm'));
-            document.body.innerHTML += '<p>Procesando...</p>'; // Ruedecita de pensando (texto simplificado)
+            
+            // Cambiar el cursor a cursor de espera
+            document.body.style.cursor = 'wait';
+            
             fetch('/', {
                 method: 'POST',
                 body: formData,
-            }).then(response => response.text())
-              .then(data => {
-                  document.body.innerHTML += `<p>${data}</p>`;
-              }).catch(error => {
-                  console.error('Error:', error);
-              });
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Restablecer el cursor a normal
+                document.body.style.cursor = 'default';
+                
+                if(data.files && data.files.length > 0) {
+                    const list = document.getElementById('transformedFilesList');
+                    list.innerHTML = ''; // Limpiar la lista actual
+                    data.files.forEach(file => {
+                        const listItem = `
+                            <br>
+                            <li>
+                                ${file} 
+                                <button onclick="location.href='/download/${file}'" class="button-descargar">Descargar</button>
+                                <button onclick="location.href='/preview/${file}'" class="button-previsualizar">Previsualizar</button>
+                                <button onclick="location.href='/delete/${file}'" class="button-borrar">Borrar</button>
+                            </li>`;
+                        list.innerHTML += listItem;
+                    });
+                } else {
+                    alert('No se encontraron archivos transformados.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Restablecer el cursor a normal incluso si hay un error
+                document.body.style.cursor = 'default';
+            });
         }
     </script>
+
+
 </body>
 </html>
